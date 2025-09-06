@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: ./backend
+    container_name: task-pilot-backend
+    ports:
+      - "7878:7878"
+    depends_on:
+      - db
+    command: >
+      bash -c "/app/wait-for-it.sh db:27017 --
+               npm run prod"
+    restart: always
+
+  db:
+    image: mongo:latest
+    container_name: task-pilot-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+    restart: always
