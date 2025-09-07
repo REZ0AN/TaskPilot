@@ -1,16 +1,21 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import connectDb from "./db/mongoConnect.js";
-
-dotenv.config();
+import userRoutes from './routes/user.route.js';
+import {
+    API_VERSION,
+    PORT,
+    MONGO_URI
+} from './configs/systemVariables.js';
 
 const app = express();
-const PORT = process.env.PORT;
-const MONGO_URI = process.env.MONGO_URI;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+
+app.use(`/api/${API_VERSION}/user`, userRoutes);
 
 
 
@@ -30,3 +35,5 @@ const startServer = async () => {
         process.exit(1);
     } 
 }
+
+startServer();
