@@ -56,7 +56,12 @@ const userLogin = async (req, res) => {
                 message:"Invalid Email or Password"
             })
         }
-        const token = getToken(user._id, user.email, user.role);
+        const tokenPayload =  {
+            userId: user._id,
+            email: user.email,
+            role: user.role,
+        }
+        const token = getToken(tokenPayload);
         setTokenInCookie(token,res);
         res.status(200).json({
             success:true,

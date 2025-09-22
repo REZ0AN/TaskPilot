@@ -4,14 +4,14 @@ import {
     TOKEN_EXPIRES_IN
 } from '../configs/systemVariables.js';
 
-const getToken = (userId, email, role) => {
+const getToken = (payload) => {
     if (!JWT_SECRET) {
          throw new Error("Token Creation Failed, User Need to Login");
     }
     return jwt.sign({
-        userId,
-        email,
-        role,
+       userId: payload['userId'],
+       email: payload['email'],
+       role: payload['role'],
     }, JWT_SECRET, {expiresIn:TOKEN_EXPIRES_IN});
 }
 
