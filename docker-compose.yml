@@ -6,16 +6,33 @@ services:
       - "7878:7878"
     depends_on:
       - db
+      - inngest
+    environment:
+      - INNGEST_DEV=1
+      - INNGEST_BASE_URL=http://inngest:8288
+      - INNGEST_SIGNATURE=warn
     command: >
-      bash -c "/app/wait-for-it.sh db:27017 --
-               npm run prod"
-    restart: always
+      bash -c "/app/wait-for-it.sh db:27017 -- npm run prod"
+    networks:
+      - app-network
 
   db:
     image: mongo:latest
     container_name: task-pilot-db
-    ports:
-      - "27017:27017"
     volumes:
       - ./data:/data/db
-    restart: always
+    networks:
+      - app-network
+
+  inngest:
+    image: inngest/inngest:latest
+    container_name: task-pilot-inngest
+    ports:
+      - "8288:8288"
+    command: inngest dev -u http://backend:7878/api/inngest
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge   

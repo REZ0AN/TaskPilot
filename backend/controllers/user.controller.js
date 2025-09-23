@@ -1,8 +1,8 @@
 import { getToken } from "../utils/jwt.js";
 import User from "../models/user.model.js";
 import { getHashedPassword, comparePassword } from "../utils/password.js";
-import setTokenInCookie from "../utils/cookie.js";
-
+import {setTokenInCookie, clearTokenCookie} from "../utils/cookie.js";
+import inngest from "../inngest/clinet.js";
 
 const userRegistraion = async (req, res) => {
     try {
@@ -18,6 +18,23 @@ const userRegistraion = async (req, res) => {
             email,
             password:hashedPassword
         });
+        // fire event to inngest
+        // Add try-catch around Inngest specifically
+        try {
+            console.log("Sending Inngest event...");
+            await inngest.send({
+                name: "user.signup",
+                data: {
+                    email,
+                }
+            });
+            console.log("Inngest event sent successfully");
+        } catch (inngestError) {
+            console.error("Inngest send failed:", inngestError);
+            // Don't fail registration if notification fails
+            console.log("Continuing with registration despite notification failure");
+        }
+
         const token = getToken(user._id, user.email, user.role);
         setTokenInCookie(token,res);
         res.status(201).json({success:true});
@@ -105,11 +122,26 @@ const userProfile = async (req, res) => {
 
 }
 
-
+const userLogout = async (req, res) => {
+    try {
+        clearTokenCookie(res);
+        res.status(200).json({
+            success:true,
+            message:"Logged Out Successfully"
+        })
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message: error.message,
+            error:"Logout Failure"
+        })
+    }
+}
 
 
 export {
     userRegistraion, 
     userLogin,
     userProfile,
+    userLogout
 }
