@@ -9,4 +9,12 @@ const setTokenInCookie = (token, res) => {
   res.cookie("token", token, options);
 };
 
-export default setTokenInCookie;
+const clearTokenCookie = (res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "strict",
+  });
+};
+
+export { clearTokenCookie, setTokenInCookie };
