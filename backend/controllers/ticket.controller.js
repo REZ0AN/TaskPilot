@@ -64,23 +64,10 @@ const  getTicketById = async (req,res) => {
                 message: "Ticket not found"
             });
         }
-
-        const isAdmin = req.user.role === 'admin';
-        const isCreator = req.user._id.toString() === ticket.createdBy.toString();
-        const isAssignee = ticket.assignedTo && req.user._id.toString() === ticket.assignedTo.toString();
-        
-        if (isAdmin || isCreator || isAssignee) {
-                return res.status(200).json({
-                    success: true,
-                    ticket
-                });
-            }
-
-       return res.status(403).json({
-            success: false,
-            message: "You're not allowed to access this resource"
-        });
-
+        res.status(200).json({
+            success:true,
+            ticket,
+        })
     } catch(error) {
         return res.status(500).json({
             success: false,
