@@ -1,28 +1,35 @@
 import express from "express";
 import {
-    userRegistraion,
+    userRegistration,
     userLogin,
     userProfile,
-    userLogout
+    userLogout,
+    updateUser,
+    getUsers,
+    deleteUser
 } from "../controllers/user.controller.js";
 import {
+    getAccess,
     getIdentity,
-    getAccess
 } from "../middlewares/auth.midddleware.js";
 
 
 const userRouter = express.Router();
 
 
-userRouter.route("/register").post(userRegistraion);
-userRouter.route("/login").get(userLogin);
-userRouter.route("/profile").get(getIdentity,userProfile);
-userRouter.route("/logout").post(getIdentity,userLogout);
+userRouter.route("/signup").post(userRegistration);
+userRouter.route("/signin").post(userLogin);
+userRouter.route("/signout").post(getIdentity,userLogout);
 
-// TODO
-// userRouter.route("/profile/update/:id").patch();
-// userRouter.route("/profile/update").put();
-// userRouter.route("/profiles").get();
+userRouter.route("/").get(getIdentity,getUsers);
+
+userRouter.route("/profile").get(getIdentity,userProfile);
+userRouter.route("/delete/:userId").delete(getIdentity, getAccess("admin"), deleteUser);
+userRouter.route("/profile").put(getIdentity, updateUser);
+
+
+
+
 
 export default userRouter;
 
