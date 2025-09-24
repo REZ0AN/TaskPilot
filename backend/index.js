@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import connectDb from "./db/mongoConnect.js";
 import userRoutes from './routes/user.route.js';
 import inngestRoutes from './routes/ingest.route.js';
+import ticketRotues from './routes/ticket.route.js';
 import {
     API_VERSION,
     PORT,
@@ -16,7 +17,8 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(`/api/${API_VERSION}/user`, userRoutes);
+app.use(`/api/${API_VERSION}/users`, userRoutes);
+app.use(`/api/${API_VERSION}/tickets`, ticketRotues);
 app.use("/api", inngestRoutes);
 
 
