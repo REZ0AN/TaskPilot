@@ -1,4 +1,4 @@
-import inngest from "../clinet.js";
+import inngest from "../inngestClient.js";
 import User from "../../models/user.model.js";
 import { sendDiscordNotification } from "../../utils/notification.js";
 import { NonRetriableError } from "inngest";
