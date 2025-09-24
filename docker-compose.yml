@@ -24,6 +24,20 @@ services:
     networks:
       - app-network
 
+  mongo-express:
+    image: mongo-express:latest
+    container_name: task-pilot-mongo-express
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      - ME_CONFIG_MONGODB_URL=mongodb://db:27017/
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin123
+    networks:
+      - app-network
+
   inngest:
     image: inngest/inngest:latest
     container_name: task-pilot-inngest
@@ -35,4 +49,4 @@ services:
 
 networks:
   app-network:
-    driver: bridge   
+    driver: bridge
