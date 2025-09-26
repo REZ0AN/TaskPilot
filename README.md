@@ -1,4 +1,4 @@
 # TaskPilot
 
 - [Backend Docs](./backend/README.md)
-- [Frontend Docs]
+- [Frontend Docs](./frontend/README.md)
